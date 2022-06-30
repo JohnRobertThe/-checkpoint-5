@@ -14,6 +14,16 @@ def read_phone(C, name):
     cur.execute(f"SELECT phone FROM phonelist WHERE name = '{name}';")
     rows = cur.fetchall()
     cur.close()
+
+def read_name(C, phone):
+    cur = C.cursor()
+    print(f"SELECT phone FROM phonelist WHERE phone = '{phone}';")
+    cur.execute(f"SELECT phone FROM phonelist WHERE name = '{phone}';")
+    rows = cur.fetchall()
+    cur.close()
+
+
+
     return rows
 def add_phone(C, name, phone):
     cur = C.cursor()
@@ -78,6 +88,20 @@ def api_func():
         if len(phone) < 1:
             return "not found"
         return phone[0][0]
+    
+    
+    elif action == "Bad action":
+        return render_template('api_usage.html', action=action)
+    if action == 'name':
+        name = args.get('phone', default="No name", type=str)
+        if name == "No name":
+            return render_template('api_usage.html', action=action)
+        phone = read_phone(conn, name)
+        if name == 0:
+            return "not found"
+        return name
+    
+    
     else:
         return f"Unknown action: '{action}'"
 
